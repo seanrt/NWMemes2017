@@ -1,3 +1,5 @@
+#!/usr/bin/python
+
 import re
 import psycopg2
 import requests
@@ -5,8 +7,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 
 HASHTAGS_TO_SEARCH = ['dank','memes','pepe']
-CITY_TO_SEARCH = 'Vancouver'
-DISTANCE_TO_SEARCH_IN_MILES = '500'
+DISTANCE_TO_SEARCH_IN_MILES = '100'
 
 def hashtagListToURLstringQuery(hashtags):
     query = ''
@@ -60,7 +61,7 @@ def getTweetDataFromSoup(soup):
         tweetData.append(TweetData(tweet, url, replyCount, retweetCount, likeCount, timestamp))
     return tweetData
 
-def updateTweetsInDatabase():
+def updateTweetsInDatabase(hashtags):
     conn = psycopg2.connect(database='bank', user='root', host='nwmeme.westus.cloudapp.azure.com', port=26257)
     conn.set_session(autocommit=True)
     databaseCursor = conn.cursor()
@@ -70,7 +71,7 @@ def updateTweetsInDatabase():
     for city in citiesDB:
         cities.append([str(cell) for cell in city][0])
 
-    hashtagsToQuery = hashtagListToURLstringQuery(HASHTAGS_TO_SEARCH)
+    hashtagsToQuery = hashtagListToURLstringQuery(hashtags)
     for city in cities:
         soup = getHTMLSoupFromCityAndHashtags(hashtagsToQuery, 'Vancouver')
         tweetData = getTweetDataFromSoup(soup)
@@ -85,4 +86,4 @@ def updateTweetsInDatabase():
 def updateMemeDatabase():
     pass
 
-updateTweetsInDatabase()
+updateTweetsInDatabase(HASHTAGS_TO_SEARCH)
