@@ -74,8 +74,16 @@ function poll(req, res, next) {
             "isReady": flag,
             "location": result.data.features[0].center
         });
-        flag = false;
+        // flag = false;
     });    
+}
+
+function setLocation(newLocation) {
+    location = newLocation;
+}
+
+function setFlag(newFlag) {
+    flag = newFlag;
 }
 
 module.exports = {
@@ -83,6 +91,6 @@ module.exports = {
     getTweetsByCityName: getTweetsByCityName,
     getTweetsByCityNameBot: getTweetsByCityNameBot,
     poll: poll,
-    flag: flag,
-    location: location
+    setFlag: setFlag,
+    setLocation: setLocation
 };

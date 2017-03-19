@@ -21,8 +21,8 @@ bot.dialog('/', dialog);
 dialog.matches('MemeByLocation', [
     function (session, args, next) {
         var city = builder.EntityRecognizer.findEntity(args.entities, 'builtin.geography.city');
-        db.flag = true;
-        db.location = city.entity;
+        db.setFlag(true);
+        db.setLocation(city.entity);
         session.send(city.entity);
         // db.getTweetsByCityNameBot(city.entity).then(function(res, err) {
         //     session.send(JSON.stringify(res));
