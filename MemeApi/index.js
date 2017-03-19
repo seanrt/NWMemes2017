@@ -1,7 +1,10 @@
 var express = require('express');
 var app = express();
 var port = 3030;
+var cors = require('cors');
 var router = express.Router();
+
+app.use(cors())
 
 var db = require('./queries');
 
