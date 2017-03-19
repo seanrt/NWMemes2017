@@ -15,4 +15,6 @@ router.get('/api/poll', db.poll);
 router.post('/api/messages', bot.connector.listen());
 
 app.use('/', router);
-app.listen(port);
+app.listen(3030, function () {
+  console.log('Meme app listening on port 3030!')
+})
