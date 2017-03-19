@@ -5,6 +5,9 @@ var options = {
     promiseLib: promise
 };
 
+var flag = false;
+var location;
+
 var pgp = require('pg-promise')(options);
 var connectionString = 'postgres://root@nwmeme.westus.cloudapp.azure.com:26257/nwmeme';
 var db = pgp(connectionString);
@@ -65,8 +68,21 @@ function getTweetsByCityName(req, res, next) {
         });
 }
 
+function poll(req, res, next) {
+    getAxiosForCity(location).then(function(result) {
+        res.status(200).json({
+            "isReady": flag,
+            "location": result.data.features[0].center
+        });
+        flag = false;
+    });    
+}
+
 module.exports = {
     getAllCities: getAllCities,
     getTweetsByCityName: getTweetsByCityName,
-    getTweetsByCityNameBot: getTweetsByCityNameBot
+    getTweetsByCityNameBot: getTweetsByCityNameBot,
+    poll: poll,
+    flag: flag,
+    location: location
 };
