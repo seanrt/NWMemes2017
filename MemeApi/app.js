@@ -32,13 +32,13 @@ dialog.matches('MemeByLocation', [
 
 dialog.matches('hello', [
     function(session, args) {
-        session.send("hi");
+        session.send("Born too early to explore the universe, born too late to explore the world, born just in time to explore dank memes");
     }
 ]);
 
 dialog.matches('None', [
     function(session, args) {
-        session.send("I don't know what you're talking about");
+        session.send("Try entering a location");
     }
 ]);
 
