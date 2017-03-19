@@ -23,10 +23,7 @@ function getAllCities(req, res, next) {
                 .then(function (axiosResults) {
                     var temp = axiosResults.map(r => r.data);
                     for (var i=0; i<temp.length; i++) {
-                        data[i].location = {
-                            lat: temp[i].features[0].center[1],
-                            lng: temp[i].features[0].center[0]
-                        }
+                        data[i].location = temp[i].features[0].center
                     }
                     res.status(200)
                         .json({
@@ -43,7 +40,7 @@ function getAllCities(req, res, next) {
 
 function getTweetsByCityName(req, res, next) {
     var cityName = req.params.cityName;
-    db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' ORDER BY tweets.createdAt LIMIT 5`)
+    db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' AND imageUrl != 'No url' ORDER BY tweets.createdAt LIMIT 5`)
         .then(function (data) {
             res.status(200)
                 .json({
