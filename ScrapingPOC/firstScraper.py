@@ -6,7 +6,7 @@ import requests
 from bs4 import BeautifulSoup
 from datetime import datetime
 
-HASHTAGS_TO_SEARCH = ['dank','memes','pepe']
+HASHTAGS_TO_SEARCH = ['dank','memes','meme','pepe','doge']
 DISTANCE_TO_SEARCH_IN_MILES = '100'
 
 def hashtagListToURLstringQuery(hashtags):
