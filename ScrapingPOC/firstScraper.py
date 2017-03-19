@@ -21,8 +21,6 @@ def removeURLsFromTweets(tweet):
     return tweet
 
 def cleanUpRawTweets(tweet):
-    url = re.search(r"pic.twitter.com\S+", tweet)
-    url = url.group(0) if url != None else 'No url'
     tweet = re.sub(r"pic.twitter.com\S+", '', tweet)
     tweet = removeURLsFromTweets(tweet)
     tweet = tweet.replace('\n',' ')
@@ -30,7 +28,7 @@ def cleanUpRawTweets(tweet):
     # tweet = tweet.encode('utf-8', 'ignore').decode('utf-8')
     # tweet = tweet.encode('utf-8')
     tweet = tweet.encode('ascii', 'ignore').decode('ascii')
-    return tweet, url
+    return tweet
 
 def getHTMLSoupFromCityAndHashtags(hashtags, city):
     twitterURL = 'https://twitter.com/search?vertical=default&q='+hashtags+'%20near%3A%22'+city+'%22%20within%3A'+DISTANCE_TO_SEARCH_IN_MILES+'mi'
@@ -53,7 +51,9 @@ class TweetData():
 def getTweetDataFromSoup(soup):
     tweetData = []
     for div in soup.findAll('div', class_='content'):
-        tweet, url = cleanUpRawTweets(div.find('p', class_='tweet-text').text)
+        tweet = cleanUpRawTweets(div.find('p', class_='tweet-text').text)
+        url = div.find('div', class_='AdaptiveMedia-photoContainer')
+        url = url.find('img')['src'] if url != None else 'No url'
         timestamp = datetime.fromtimestamp(int(div.find('span', class_='_timestamp')['data-time']))
         replyCount = div.find('div', class_='ProfileTweet-action--reply').find('div', class_='IconTextContainer').find('span', class_='ProfileTweet-actionCountForPresentation').text
         retweetCount = div.find('div', class_='ProfileTweet-action--retweet').find('div', class_='IconTextContainer').find('span', class_='ProfileTweet-actionCountForPresentation').text
