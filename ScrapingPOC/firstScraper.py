@@ -73,7 +73,7 @@ def updateTweetsInDatabase(hashtags):
 
     hashtagsToQuery = hashtagListToURLstringQuery(hashtags)
     for city in cities:
-        soup = getHTMLSoupFromCityAndHashtags(hashtagsToQuery, 'Vancouver')
+        soup = getHTMLSoupFromCityAndHashtags(hashtagsToQuery, city)
         tweetData = getTweetDataFromSoup(soup)
         print('------'+city+'------')
         for tweet in tweetData:
