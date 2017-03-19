@@ -5,8 +5,11 @@ var options = {
     promiseLib: promise
 };
 
+var flag = false;
+var location;
+
 var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://root@nwmeme.westus.cloudapp.azure.com:26257/nwmeme';
+var connectionString = 'postgres://root@nwmeme2.westus.cloudapp.azure.com:26257/nwmeme2';
 var db = pgp(connectionString);
 
 function getAxiosForCity(cityName) {
@@ -38,6 +41,18 @@ function getAllCities(req, res, next) {
         });
 }
 
+function getTweetsByCityNameBot(cityName) {
+    return new Promise(function(resolve, reject) {
+        db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' AND imageUrl != 'No url' ORDER BY tweets.createdAt LIMIT 5`)
+            .then(function (data) {
+                resolve(data);
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    });
+}
+
 function getTweetsByCityName(req, res, next) {
     var cityName = req.params.cityName;
     db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' AND imageUrl != 'No url' ORDER BY tweets.createdAt LIMIT 5`)
@@ -53,7 +68,29 @@ function getTweetsByCityName(req, res, next) {
         });
 }
 
+function poll(req, res, next) {
+    getAxiosForCity(location).then(function(result) {
+        res.status(200).json({
+            "isReady": flag,
+            "location": result.data.features[0].center
+        });
+        // flag = false;
+    });    
+}
+
+function setLocation(newLocation) {
+    location = newLocation;
+}
+
+function setFlag(newFlag) {
+    flag = newFlag;
+}
+
 module.exports = {
     getAllCities: getAllCities,
     getTweetsByCityName: getTweetsByCityName,
+    getTweetsByCityNameBot: getTweetsByCityNameBot,
+    poll: poll,
+    setFlag: setFlag,
+    setLocation: setLocation
 };
