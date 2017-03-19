@@ -1,17 +1,6 @@
-var restify = require('restify');
 var builder = require('botbuilder');
-
-//=========================================================
-// Bot Setup
-//=========================================================
-
-// Setup Restify Server
-var server = restify.createServer();
-server.listen(process.env.port || process.env.PORT || 3978, function () {
-   console.log('%s listening to %s', server.name, server.url); 
-});
+var db = require('./queries');
   
-// Create chat bot
 var connector = new builder.ChatConnector({
     appId: process.env.MICROSOFT_APP_ID || 'd76ae68c-910b-48a3-a746-8fc7c2b44d6c',
     appPassword: process.env.MICROSOFT_APP_PASSWORD || 'LbzYbkMyXCwF987SwyYjhsS'
@@ -31,7 +20,10 @@ bot.dialog('/', dialog);
 
 dialog.matches('MemeByLocation', [
     function (session, args, next) {
-         session.send("test");
+        var city = builder.EntityRecognizer.findEntity(args.entities, 'builtin.geography.city');
+        db.getTweetsByCityNameBot(city.entity).then(function(res, err) {
+            session.send(JSON.stringify(res));
+        });
     }
 ]);
 
@@ -47,4 +39,6 @@ dialog.matches('None', [
     }
 ]);
 
-server.post('/api/messages', connector.listen());
+module.exports = {
+    connector : connector
+}

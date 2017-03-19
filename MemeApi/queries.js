@@ -38,6 +38,18 @@ function getAllCities(req, res, next) {
         });
 }
 
+function getTweetsByCityNameBot(cityName) {
+    return new Promise(function(resolve, reject) {
+        db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' AND imageUrl != 'No url' ORDER BY tweets.createdAt LIMIT 5`)
+            .then(function (data) {
+                resolve(data);
+            })
+            .catch(function (err) {
+                return next(err);
+            });
+    });
+}
+
 function getTweetsByCityName(req, res, next) {
     var cityName = req.params.cityName;
     db.any(`SELECT * FROM tweets INNER JOIN cities ON tweets.cityId = cities.cityID WHERE cities.cityName = '${cityName}' AND imageUrl != 'No url' ORDER BY tweets.createdAt LIMIT 5`)
@@ -56,4 +68,5 @@ function getTweetsByCityName(req, res, next) {
 module.exports = {
     getAllCities: getAllCities,
     getTweetsByCityName: getTweetsByCityName,
+    getTweetsByCityNameBot: getTweetsByCityNameBot
 };
