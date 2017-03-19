@@ -23,10 +23,23 @@ dialog.matches('MemeByLocation', [
         var city = builder.EntityRecognizer.findEntity(args.entities, 'builtin.geography.city');
         db.setFlag(true);
         db.setLocation(city.entity);
-        session.send(city.entity);
-        // db.getTweetsByCityNameBot(city.entity).then(function(res, err) {
-        //     session.send(JSON.stringify(res));
-        // });
+            db.getTweetsByCityNameBot(city.entity).then(function(res, err) {
+            for(var i = 0; i < res.length; i++) {
+                                        console.log(res);  
+            var msg = new builder.Message(session)
+                .attachments([
+                    new builder.HeroCard(session)
+                        .title(res[i].tweet)
+                        .text(res[i].retweetCount + " retweets, " + res[i].likesCount + " likes, " + res[i].repliesCount + " replies")
+                        .images([
+                            builder.CardImage.create(session, res[i].imageUrl)
+                        
+                        ])
+                ]);
+
+                session.send(msg);
+            }
+        });
     }
 ]);
 
