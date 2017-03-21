@@ -9,7 +9,7 @@ var flag = false;
 var location;
 
 var pgp = require('pg-promise')(options);
-var connectionString = 'postgres://root@nwmeme2.westus.cloudapp.azure.com:26257/nwmeme2';
+var connectionString = 'postgres://root@nwmeme2.westus.cloudapp.azure.com:26257/nwmeme';
 var db = pgp(connectionString);
 
 function getAxiosForCity(cityName) {
