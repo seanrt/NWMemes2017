@@ -62,7 +62,7 @@ def getTweetDataFromSoup(soup):
     return tweetData
 
 def updateTweetsInDatabase(hashtags):
-    conn = psycopg2.connect(database='bank', user='root', host='nwmeme.westus.cloudapp.azure.com', port=26257)
+    conn = psycopg2.connect(database='nwmeme', user='root', host='nwmeme2.westus.cloudapp.azure.com', port=26257)
     conn.set_session(autocommit=True)
     databaseCursor = conn.cursor()
     databaseCursor.execute('SELECT cityName FROM nwmeme.cities')
