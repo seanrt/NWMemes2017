@@ -8,7 +8,7 @@ var connector = new builder.ChatConnector({
 var bot = new builder.UniversalBot(connector);
 
 var luisAppId = process.env.LuisAppId || '48326159-b295-4e86-89ca-2d444edb0460';
-var luisAPIKey = process.env.LuisAPIKey || '222ff6a5e2ba4465a01f476979959732';
+var luisAPIKey = process.env.LuisAPIKey || '91e0a963c49c4149a253ac6d3e84b695';
 
 const LuisModelUrl = `https://westus.api.cognitive.microsoft.com/luis/v2.0/apps/${luisAppId}?subscription-key=${luisAPIKey}&verbose=true`;
 var recognizer = new builder.LuisRecognizer(LuisModelUrl);
